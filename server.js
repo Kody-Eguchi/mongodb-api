@@ -3,7 +3,15 @@ const mongoose = require("mongoose");
 const app = express();
 require("dotenv").config();
 
-//routes
+const userRoutes = require("./routes/user");
+
+//MIDDLEWARE
+app.use(express.json());
+
+//ROUTES
+app.use("/api", userRoutes);
+
+//
 app.get("/", (req, res) => {
   res.send("Hello");
 });
@@ -12,7 +20,10 @@ const uri = `mongodb+srv://${process.env.USERNAME}:${process.env.PASSWORD}@clust
 
 async function connect() {
   try {
-    await mongoose.connect(uri);
+    await mongoose.connect(uri, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
     console.log("Connected to MongoDB");
   } catch (error) {
     console.log(error);
